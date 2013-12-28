@@ -23,9 +23,11 @@ class HowdoiDirectCommand(sublime_plugin.TextCommand):
                                          shell=True)
                     output, errors = p.communicate()
 
-                    # Python 3 returns binary data, hence we have to decode it.
-                    # Python 2 won't be affected by this decoding.
-                    output = output.decode('ascii')
+                    try:
+                        output = unicode(output, "ascii")
+                    except UnicodeError:
+                        output = unicode(output, "utf-8")
+
 
                     # At least in Windows, output would contain carriage return
                     # characters (CR). We have to remove them in order to look
